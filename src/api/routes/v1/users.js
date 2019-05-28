@@ -5,9 +5,13 @@ const controller = require("../../controllers/users.controller");
 
 
 /* GET ALL USERS*/
-router.route("/", controller.getUsersById);
+router
+  .route("/")
+  .get(controller.getUsersById);
 
 /* GET USERS BY ID */
-router.get("/:id", controller.getUsersById);
+router
+  .get("/:id")
+  .get(controller.getUsersById);
 
 module.exports = router;
