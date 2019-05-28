@@ -1,21 +1,22 @@
 var axios = require("axios");
+const url = "https://redmine-mock-api.herokuapp.com/api/v1/users?forceMail=email@address.domain";
 
-
-exports.getUsers = async(req, res, next) => {
+exports.getUsers = async() => {
     try {
-      const res = await axios.get('https://redmine-mock-api.herokuapp.com/api/v1/users?forceMail=email@address.domain');
-      console.log(res.data)
+        const res = await axios.get(url);
+        const data = res.data;
+        console.log(data)  
     } catch (error) {
       console.log(error);
     }
   }
 
   //corrigir
-  exports.getUsersById = async(req, res, next) => {
+  exports.getUsersById = async() => {
     try {
-      const res = await axios.get('https://redmine-mock-api.herokuapp.com/api/v1/users?forceMail=email@address.domain');
-      //console.log(res.data)
-      console.log(res.data[0].id);
+        const res = await axios.get(url);
+        const data = res.data;
+        console.log(data.id)  
     } catch (error) {
       console.log(error);
     }
