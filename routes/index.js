@@ -35,12 +35,21 @@ router.get("/users/:id", async (req, res, next) => {
   });
   res.json(id);
   console.log(userId);
+
+//falta mudar o data[0] hardcodded e continuar a partir aqui
+router.get("/users/:id", async (req, res, next) => {
+  const userId = await getUsers({
+    id: req.id
+  });
+  res.json(userId);
+  //console.log(userId);
 });
 
 async function getUsers() {
   try {
     const res = await axios.get('https://redmine-mock-api.herokuapp.com/api/v1/users?forceMail=email@address.domain');
     //console.log(res.data)
+    console.log(res.data[0].id)
 
   } catch (error) {
     console.log(error);
