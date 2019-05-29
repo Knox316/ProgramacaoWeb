@@ -11,6 +11,11 @@ exports.getUsers = async (req, res) => {
   }
 
 //corrigir
-exports.getUsersById = () => {
-  const res = axios.get(url).then(res => console.log(res.data.id)).catch(err => console.log("Axios err: ", err));
-}
+exports.getUsersById = async (req, res) => {
+    try {
+      const { data } = await axios.get(url)
+      res.json(data.id)
+    } catch (err) {
+      console.error('Axios Error:', err)
+    }
+  }
