@@ -1,8 +1,10 @@
 var axios = require("axios");
+var debug = require('debug');
 const url = "https://redmine-mock-api.herokuapp.com/api/v1/issues?after=2019-04-13T12:00";
 
 /** GET ALL ISSUES */
 exports.getAllIssues = async (req, res) => {
+    debug('getAllIssues')
     try {
       const { data } = await axios.get(url)
       res.json(data)
