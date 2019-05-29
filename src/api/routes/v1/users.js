@@ -7,7 +7,7 @@ const controller = require("../../controllers/users.controller");
 /* GET ALL USERS*/
 router
   .route("/")
-  .get(controller.getUsersById);
+  .get(controller.getUsers);
 
 /* GET USERS BY ID */
 router
