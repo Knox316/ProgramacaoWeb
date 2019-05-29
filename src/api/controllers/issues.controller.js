@@ -1,7 +1,7 @@
 var axios = require("axios");
 const url = "https://redmine-mock-api.herokuapp.com/api/v1/issues?after=2019-04-13T12:00";
 
-
+/** GET ALL ISSUES */
 exports.getAllIssues = async (req, res) => {
     try {
       const { data } = await axios.get(url)
@@ -11,12 +11,12 @@ exports.getAllIssues = async (req, res) => {
     }
   }
 
-
-//corrigir
+/** GET ISSUES BY ID */
 exports.getAllIssuesById = async (req, res) => {
     try {
-      const { data } = await axios.get(url)
-      res.json(data.id)
+        // let { id } = await req.params;
+        // const issues = issues.filter(e => e.id != id);
+        // res.json(issues);
     } catch (err) {
       console.error('Axios Error:', err)
     }
