@@ -16,7 +16,13 @@ exports.getAllIssues = async (req, res) => {
 /** GET ISSUES BY ID */
 exports.getAllIssuesById = async (req, res) => {
     try {
-        // let { id } = await req.params;
+        debugger;
+        const { data } = await axios.get(url)
+        let issues = data.issues;
+        let id = issues.map(id => id.id)
+        console.log(id);
+        res.json(id)
+
         // const issues = issues.filter(e => e.id != id);
         // res.json(issues);
     } catch (err) {
