@@ -100,4 +100,4 @@ typings/
 /.vs/slnx.sqlite
 /.vs/ProjectSettings.json
 /.vs/ProgramacaoWeb/config/applicationhost.config
-/.vscode
+.vscode/
