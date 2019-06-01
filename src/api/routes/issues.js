@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-const controller = require("../../controllers/issues.controller");
+const controller = require("../controllers/issuesController");
 /* GET ALL ISSUES */
 router
   .route('/')
