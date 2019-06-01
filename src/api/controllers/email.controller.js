@@ -1,18 +1,20 @@
 var nodeMailer = require('nodemailer');
+var mailAccount = 'ipcaweb2019@gmail.com';
+var mailCredentials = 'ipca2019';
 
 /** GET ISSUES BY ID */
 exports.PostSendEmail = async (req, res, next) => {
   var transporter = nodeMailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'youremail@gmail.com',
-      pass: 'yourpassword'
+      user: mailAccount,
+      pass: mailCredentials
     }
   });
 
   var mailOptions = {
-    from: 'brunor.1994@hotmail.com',
-    to: 'a9969@alunos.ipca.pt',
+    from: mailAccount,
+    to: 'brunor.1994@hotmail.com',
     subject: 'Sending Email using Node.js',
     text: 'That was easy!'
   };
