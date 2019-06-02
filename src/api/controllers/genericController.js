@@ -10,7 +10,7 @@ function sendResponse(req, res, data) {
         res.status(HttpStatus.NOT_FOUND).send("NOT FOUND");
     } else {
         // if(req.headers.accept == "application/json") {
-        res.json(data.data);
+        res.json(data);
         // } else {
         //     res.set('Content-Type', 'text/xml');
         //     console.dir(data);

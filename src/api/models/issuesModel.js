@@ -1,31 +1,30 @@
 var mongo = require('mongodb');
 const DB = require("../models/DB");
 var uuid = require('uuid');
-
-var strUsers = 'Users';
+var strIssues = 'Issues';
 var db = new DB();
 
 function CreateCollection() {
-    return db.CreateCollection(strUsers);
+    return db.CreateCollection(strIssues);
 }
 
 function GetAll() {
-    return db.GetAll(strUsers);
+    return db.GetAll(strIssues);
 }
 
 function Get(idToFind) {
-    return db.Get(strUsers, { "id": Number(idToFind) });
+    return db.Get(strIssues, { "id": Number(idToFind) });
 }
 
 function Delete(idToFind) {
-    return db.Delete(strUsers, { "id": Number(idToFind) });
+    return db.Delete(strIssues, { "id": Number(idToFind) });
 }
 
 function Insert(newObj) {
     if ('_id' in newObj)
         newObj = uuid();
 
-    return db.Insert(strUsers, newObj);
+    return db.Insert(strIssues, newObj);
 }
 
 function InsertMany(newObjs) {
@@ -35,13 +34,17 @@ function InsertMany(newObjs) {
         return elem;
     });
 
-    return db.InsertMany(strUsers, newObjs);
+    return db.InsertMany(strIssues, newObjs);
 }
 
 function Update(newObj) {
-    return db.Update(strUsers, { "_id": newObj._id }, newObj);
+    return db.Update(strIssues, { "_id": newObj._id }, newObj);
 }
 
+function DropCollection() {
+    return db.DropCollection(strIssues);
+
+}
 module.exports = {
     CreateCollection: CreateCollection,
     GetAll: GetAll,
@@ -49,5 +52,6 @@ module.exports = {
     Delete: Delete,
     Insert: Insert,
     InsertMany: InsertMany,
-    Update: Update
+    Update: Update,
+    DropCollection: DropCollection
 }
