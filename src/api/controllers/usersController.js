@@ -30,11 +30,38 @@ function InsertAllUsers(req, res) {
     });
 }
 
-function GetAllUsers(res, req) {
-    model.getAllUsers();
+async function CreateCollection(req, res) {
+    await (usersModel.CreateCollection()).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
 }
 
-exports.getUsers = GetUsers;
-exports.getUsersById = GetUsersById;
-exports.insertAllUsers = InsertAllUsers;
-exports.getAllUsers = GetAllUsers;
+async function GetAll(req, res) {
+    await (usersModel.GetAll()).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+}
+
+async function Get(req, res) {
+    await (usersModel.Get(req.params.idToFind)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+}
+
+async function Delete(req, res) {
+    await (usersModel.Delete(req.params.idToFind)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+}
+
+async function Insert(req, res) {
+    await (usersModel.Insert(req.body)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+}
+
+async function InsertMany(req, res) {
+    await (usersModel.InsertMany(req.body)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+}
+
+async function Update(req, res) {
+    await (usersModel.Update(req.body)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+}
+
+exports.CreateCollection = CreateCollection;
+exports.GetAll = GetAll;
+exports.Get = Get;
+exports.Insert = Insert;
+exports.InsertMany = InsertMany;
+exports.Update = Update;
+exports.Delete = Delete;
