@@ -32,7 +32,7 @@ function InsertAllUsers(req, res) {
     });
 }
 
-function GetAllUsers(res, res) {
+function GetAllUsers(res, req) {
     model.getAllUsers();
 }
 
@@ -40,4 +40,3 @@ exports.getUsers = GetUsers;
 exports.getUsersById = GetUsersById;
 exports.insertAllUsers = InsertAllUsers;
 exports.getAllUsers = GetAllUsers;
-

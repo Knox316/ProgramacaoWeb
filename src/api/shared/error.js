@@ -3,6 +3,10 @@ const errorStatusUnauthorized = "Unauthorized";
 const errorStatusPaymentRequired = "Payment Required";
 const errorStatusForbidden = "Forbidden";
 const errorStatusNotFound = "Not Found";
+const RESPONSE_CODE_OK = 200;
+const RESPONSE_CODE_BAD_REQUEST = 400;
+const HTTP_CONTENT_TYPE_HEADER = 'Content-Type';
+const HTTP_CONTENT_TYPE_JSON = 'application/json';
 
 
 //mudar isto depois porque a ideia não é nossa.

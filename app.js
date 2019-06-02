@@ -1,3 +1,9 @@
+import bodyParser from 'body-parser';
+import expressGraphQL from 'express-graphql';
+import cors from 'cors';
+import mongoose from 'mongoose';
+require('dotenv').config();
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -10,6 +16,19 @@ var issuesRouter = require('./src/api/routes/issues');
 var emailRouter = require('./src/api/routes/email');
 
 var app = express();
+
+app.use(
+  cors(),
+  bodyParser.json()
+)
+app.use(
+  "/graphql",
+  expressGraphQL({
+    schema: {},
+    rootValue: {},
+    graphiql: true
+  })
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -40,6 +59,20 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  //mongo connection
+  const port = process.env.PORT || 5000;
+  const uri = `mongodb+srv://${process.env.DB_USER}:<${process.env.DB_PASS}>@cluster0-q0j88.mongodb.net/test?retryWrites=true&w=majority`
+  //const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds135852.mlab.com:35852/mern-graphql-jwt`;
+  mongoose.connect(uri, {
+      useNewUrlParser: true
+    })
+    .then(() => {
+      app.listen(port, () => console.log(`Server is listening on port: ${port}`));
+    })
+    .catch(err => {
+      console.log(err);
+    })
 
   // render the error page
   res.status(err.status || 500);
