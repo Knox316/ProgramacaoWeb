@@ -1,9 +1,7 @@
-import bodyParser from 'body-parser';
-import expressGraphQL from 'express-graphql';
-import cors from 'cors';
-import mongoose from 'mongoose';
-require('dotenv').config();
-
+var cors = require('cors');
+var mongoose = require('mongoose');
+var expressGraphQL = require('express-graphql');
+var bodyParser = require('body-parser');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -14,6 +12,7 @@ var indexRouter = require('./src/api/routes/index');
 var usersRouter = require('./src/api/routes/users');
 var issuesRouter = require('./src/api/routes/issues');
 var emailRouter = require('./src/api/routes/email');
+require('dotenv').config();
 
 var app = express();
 

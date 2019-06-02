@@ -1,6 +1,6 @@
 var axios = require("axios");
-generic = require('./genericController');
-usersModel = require("../models/usersModel")
+var generic = require('./genericController');
+var usersModel = require("../models/usersModel")
 const baseURL = "https://redmine-mock-api.herokuapp.com/api/v1/users";
 
 var getUsersPromisse = axios.get(baseURL + "?forceMail=email@address.domain");
