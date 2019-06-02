@@ -1,12 +1,11 @@
 var axios = require("axios");
 generic = require('./genericController');
-model = require("../models/usersModel")
+usersModel = require("../models/usersModel")
 const baseURL = "https://redmine-mock-api.herokuapp.com/api/v1/users";
-
 
 var getUsersPromisse = axios.get(baseURL + "?forceMail=email@address.domain");
 
-function GetUsers(req, res, send = true) {
+function GetUsers(req, res) {
     getUsersPromisse.then(data => {
         generic.SendResponse(req, res, data);
     }).catch((err) => {
@@ -27,8 +26,7 @@ async function GetUsersById(req, res) {
 
 function InsertAllUsers(req, res) {
     getUsersPromisse.then(data => {
-        model.insertAllUsers(data);
-        res.json("OK");
+        await (usersModel.InsertMany(data)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
     });
 }
 

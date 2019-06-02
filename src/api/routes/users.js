@@ -2,16 +2,14 @@ var express = require("express");
 var router = express.Router();
 const controller = require("../controllers/usersController");
 
+router.post("/Update", controller.Update);
 
-/* GET ALL USERS*/
-router.get("/", controller.getUsers);
+router.route("/InsertMany").post(controller.InsertMany);
 
-router.get("/getAllUsers", controller.getAllUsers);
+router.route("/CreateCollection").post(controller.CreateCollection);
 
-/* GET USERS BY ID */
-router.get("/:id", controller.getUsersById);
+router.route("/:idToFind").get(controller.Get).delete(controller.Delete);
 
-router.put("/insertAllUsers", controller.insertAllUsers);
+router.route("/").get(controller.GetAll).post(controller.Insert);
 
 module.exports = router;
-
