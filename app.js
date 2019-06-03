@@ -12,6 +12,8 @@ var indexRouter = require('./src/api/routes/index');
 var usersRouter = require('./src/api/routes/users');
 var issuesRouter = require('./src/api/routes/issues');
 var emailRouter = require('./src/api/routes/email');
+var loginRouter = require('./src/api/routes/login');
+
 require('dotenv').config();
 
 var app = express();
@@ -46,6 +48,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
+app.use('/login', loginRouter);
 
 
 // catch 404 and forward to error handler
@@ -64,8 +67,8 @@ app.use(function (err, req, res, next) {
   const uri = `mongodb+srv://${process.env.DB_USER}:<${process.env.DB_PASS}>@cluster0-q0j88.mongodb.net/test?retryWrites=true&w=majority`
   //const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds135852.mlab.com:35852/mern-graphql-jwt`;
   mongoose.connect(uri, {
-      useNewUrlParser: true
-    })
+    useNewUrlParser: true
+  })
     .then(() => {
       app.listen(port, () => console.log(`Server is listening on port: ${port}`));
     })
