@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, BrowserRouter } from 'react-router-dom';
 import withAuth from './components/Login/withAuth';
 import Home from './components/Login/Home';
 import Secret from './components/Login/Secret';
@@ -14,16 +14,20 @@ class App extends Component {
       
       <div>
         <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/secret">Secret</Link></li>
-          <li><Link to="/login">Login</Link></li>
+          <BrowserRouter>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/secret">Secret</Link></li>
+            <li><Link to="/login">Login</Link></li>
+          </BrowserRouter>
         </ul>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" exact component={Home} />
+            <Route path="/secret" component={withAuth(Secret)} />
+            <Route path="/login" component={Login} />
+          </Switch>
+        </BrowserRouter>
 
-        <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/secret" component={withAuth(Secret)} />
-          <Route path="/login" component={Login} />
-        </Switch>
       </div>
     );
   }
