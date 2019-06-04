@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Link, Route, Switch, BrowserRouter } from 'react-router-dom';
-import withAuth from './components/Login/withAuth';
-import Home from './components/Login/Home';
-import Secret from './components/Login/Secret';
-import Login from './components/Login/Login';
+import withAuth from './withAuth';
+import Home from './Home';
+import Secret from './Secret';
+import Login from './Login';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'typeface-roboto';
 
