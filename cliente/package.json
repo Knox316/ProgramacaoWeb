@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+<<<<<<< HEAD
     "@material-ui/core": "^4.0.2",
     "bootstrap": "^4.3.1",
     "react": "^16.8.6",
@@ -10,6 +11,11 @@
     "react-router-dom": "^5.0.0",
     "react-scripts": "3.0.1",
     "typeface-roboto": "0.0.54"
+=======
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "3.0.1"
+>>>>>>> ea5c5ee481392357eb511a913a11a14144aad4ce
   },
   "scripts": {
     "start": "react-scripts start",
