@@ -100,10 +100,8 @@ typings/
 /.vs/slnx.sqlite
 /.vs/ProjectSettings.json
 /.vs/ProgramacaoWeb/config/applicationhost.config
-<<<<<<< HEAD
 .vscode/
 
 .vscode
-=======
-.vscode/
->>>>>>> ea5c5ee481392357eb511a913a11a14144aad4ce
+
+.env

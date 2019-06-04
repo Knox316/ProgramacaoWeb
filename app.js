@@ -17,9 +17,10 @@ var emailRouter = require('./src/api/routes/email');
 var loginRouter = require('./src/api/jwtAuth/routes/login');
 var authRouter = require('./src/api/jwtAuth/routes/auth');
 
-require('dotenv').config();
 
 var app = express();
+require('dotenv').config();
+console.log(process.env.SECRET);
 
 app.use(cookieParser());
 
@@ -74,11 +75,11 @@ app.use(function (err, req, res, next) {
 });
 
 //jwt
-app.get('/api/secret', withAuthRouter, function(req, res) {
+app.get('/api/secret', withAuthRouter, function (req, res) {
   res.send('The password is ');
 });
 
-app.get('/checkToken', withAuthRouter, function(req, res) {
+app.get('/checkToken', withAuthRouter, function (req, res) {
   res.sendStatus(200);
 });
 
