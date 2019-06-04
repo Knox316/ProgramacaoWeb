@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 var express = require("express");
 var router = express.Router();
-const secret = "webapp";
 
 router.post('/', function (req, res) {
     const {
@@ -38,7 +37,7 @@ router.post('/', function (req, res) {
                     const payload = {
                         email
                     };
-                    const token = jwt.sign(payload, secret, {
+                    const token = jwt.sign(payload, process.env.SECRET, {
                         expiresIn: '1h'
                     });
                     res.cookie('token', token, {
