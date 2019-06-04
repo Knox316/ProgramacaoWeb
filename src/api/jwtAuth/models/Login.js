@@ -1,8 +1,8 @@
-// Login.js
+// User.js
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const LoginSchema = new mongoose.Schema({
+const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
@@ -13,7 +13,10 @@ const LoginSchema = new mongoose.Schema({
         required: true
     }
 });
-LoginSchema.pre('save', function (next) {
+console.log('teste');
+UserSchema.pre('save', function (next) {
+    console.log('teste1');
+
     // Check if document is new or a new password has been set
     if (this.isNew || this.isModified('password')) {
         // Saving reference to this because of changing scopes
@@ -32,14 +35,4 @@ LoginSchema.pre('save', function (next) {
     }
 });
 
-LoginSchema.methods.isCorrectPassword = function (password, callback) {
-    bcrypt.compare(password, this.password, function (err, same) {
-        if (err) {
-            callback(err);
-        } else {
-            callback(err, same);
-        }
-    });
-}
-
-module.exports = mongoose.model('Login', LoginSchema);
+module.exports = mongoose.model('User', UserSchema);

@@ -1,24 +1,20 @@
+// Import our User schema
+const User = require('../../jwtAuth/models/Login.js');
+// POST route to register a user
 var express = require("express");
 var router = express.Router();
-const Login = require('../../jwtAuth/models/Login.js');
-//const controller = require("../controllers/LoginController");
-
-//router.route("/api/register").get(controller.);
-
-//router.route("/").get(controller.Get).post(controller.Insert);
-//POST route to register a user
 router.post('/api/register', function (req, res) {
     const {
         email,
         password
     } = req.body;
-    const login = new Login({
+    const user = new User({
         email,
         password
     });
-    console.log(login);
-    login.save(function (err) {
-        console.log(err);
+    console.log(user);
+    user.save(function (err) {
+        console.log('teste2');
         if (err) {
             res.status(500)
                 .send("Error registering new user please try again.");
