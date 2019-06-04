@@ -1,6 +1,6 @@
 // User.js
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-node');
 const saltRounds = 10;
 const UserSchema = new mongoose.Schema({
     email: {

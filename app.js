@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 
@@ -65,15 +64,7 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 
-  //mongo connection
-  const port = process.env.PORT || 5000;
-  const uri = `mongodb+srv://${process.env.DB_USER}:<${process.env.DB_PASS}>@cluster0-q0j88.mongodb.net/test?retryWrites=true&w=majority`
-  //const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds135852.mlab.com:35852/mern-graphql-jwt`;
-  mongoose.connect(uri, {
-    useNewUrlParser: true
-  }).then(() => {
-    app.listen(port, () => console.log(`Server is listening on port: ${port}`));
-  })
+
 });
 
 
