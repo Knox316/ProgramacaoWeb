@@ -3,7 +3,7 @@ const User = require('../../jwtAuth/models/Login.js');
 // POST route to register a user
 var express = require("express");
 var router = express.Router();
-router.post('/', function (req, res) {
+router.post('/api/register', function (req, res) {
     const {
         email,
         password

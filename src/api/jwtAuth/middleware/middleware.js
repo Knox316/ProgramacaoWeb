@@ -1,6 +1,7 @@
 //não alterar
 //vou acabar logo
 // middleware.js
+const secret = "abc";
 const jwt = require('jsonwebtoken');
 const withAuth = function (req, res, next) {
     const token =
@@ -11,7 +12,7 @@ const withAuth = function (req, res, next) {
     if (!token) {
         res.status(401).send('Unauthorized: No token provided');
     } else {
-        jwt.verify(token, process.env.SECRET, function (err, decoded) {
+        jwt.verify(token, secret, function (err, decoded) {
             if (err) {
                 res.status(401).send('Unauthorized: Invalid token');
             } else {

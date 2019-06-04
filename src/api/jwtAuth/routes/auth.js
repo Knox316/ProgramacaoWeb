@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 var express = require("express");
 var router = express.Router();
+const secret = "webapp";
 
 router.post('/', function (req, res) {
     const {
@@ -11,7 +12,6 @@ router.post('/', function (req, res) {
         email
     }, function (err, user) {
         if (err) {
-            console.error(err);
             res.status(500)
                 .json({
                     error: 'Internal error please try again'
@@ -38,7 +38,7 @@ router.post('/', function (req, res) {
                     const payload = {
                         email
                     };
-                    const token = jwt.sign(payload, process.env.SECRET, {
+                    const token = jwt.sign(payload, secret, {
                         expiresIn: '1h'
                     });
                     res.cookie('token', token, {

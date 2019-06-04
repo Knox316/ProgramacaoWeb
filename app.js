@@ -22,20 +22,10 @@ var app = express();
 require('dotenv').config();
 console.log(process.env.SECRET);
 
-app.use(cookieParser());
-
 app.use(
   cors(),
   bodyParser.json()
 )
-// app.use(
-//   "/graphql",
-//   expressGraphQL({
-//     schema: {},
-//     rootValue: {},
-//     graphiql: true
-//   })
-// );
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -54,7 +44,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-app.use('/login', loginRouter);
+app.use('/', loginRouter);
 app.use('/auth', authRouter);
 
 
