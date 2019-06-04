@@ -19,10 +19,15 @@ UserSchema.pre('save', function (next) {
 
     // Check if document is new or a new password has been set
     if (this.isNew || this.isModified('password')) {
+        console.log('teste2');
+
         // Saving reference to this because of changing scopes
         const document = this;
+        console.log(document);
         bcrypt.hash(document.password, saltRounds,
             function (err, hashedPassword) {
+                console.log(err);
+                console.log(hashedPassword);
                 if (err) {
                     next(err);
                 } else {

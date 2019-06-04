@@ -3,7 +3,7 @@ const User = require('../../jwtAuth/models/Login.js');
 // POST route to register a user
 var express = require("express");
 var router = express.Router();
-router.post('/api/register', function (req, res) {
+router.post('/', function (req, res) {
     const {
         email,
         password
@@ -16,6 +16,7 @@ router.post('/api/register', function (req, res) {
     user.save(function (err) {
         console.log('teste2');
         if (err) {
+            console.log(err);
             res.status(500)
                 .send("Error registering new user please try again.");
         } else {
