@@ -1,72 +1,45 @@
-const DB = require('./DB');
-
-
-class Login {
-    constructor() {
-        this.db = new DB();
-        this.strLogin = "Login";
-        this.username = null;
-        this.password = null;
-        this.token = null;
+// Login.js
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const UserSchema = new mongoose.Schema({
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    password: {
+        type: String,
+        required: true
     }
-
-    get Username() {
-        return this.username;
+});
+UserSchema.pre('save', function (next) {
+    // Check if document is new or a new password has been set
+    if (this.isNew || this.isModified('password')) {
+        // Saving reference to this because of changing scopes
+        const document = this;
+        bcrypt.hash(document.password, saltRounds,
+            function (err, hashedPassword) {
+                if (err) {
+                    next(err);
+                } else {
+                    document.password = hashedPassword;
+                    next();
+                }
+            });
+    } else {
+        next();
     }
+});
 
-    set Username(username) {
-        return this.username = username;
-    }
-
-    get Password() {
-        return this.password;
-    }
-
-    set Password(password) {
-        return this.transport = transport;
-    }
-
-    get Token() {
-        return this.token;
-    }
-
-    set Token(token) {
-        return this.token = token;
-    }
-
-    Get(username = null, password = null, token = null) {
-        if (username)
-            this.Username = username;
-        if (password)
-            this.Password = password;
-        if (token)
-            this.Token = token;
-        return Get(this);
-    }
-
-    Get(newLogin) {
-        if (!newLogin)
-            newLogin = this;
-        return this.db.Get(this.strLogin, {
-            "Username": newLogin.Username,
-            "Password": newLogin.Password
-        });
-    }
-
-    Insert(newLogin) {
-        if (!newLogin)
-            newLogin = this;
-        return this.db.Insert(this.strLogin, {
-            "Username": newLogin.Username,
-            "Password": newLogin.Password,
-            "Token": newLogin.Token
-        })
-    }
-
-    GetAll() {
-        return this.db.GetAll(this.strLogin);
-    }
-
+UserSchema.methods.isCorrectPassword = function (password, callback) {
+    bcrypt.compare(password, this.password, function (err, same) {
+        if (err) {
+            callback(err);
+        } else {
+            callback(err, same);
+        }
+    });
 }
 
-module.exports = Login;
+module.exports = mongoose.model('User', UserSchema);
