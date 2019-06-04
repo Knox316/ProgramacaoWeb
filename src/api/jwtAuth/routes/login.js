@@ -1,22 +1,24 @@
 var express = require("express");
 var router = express.Router();
+const Login = require('../../jwtAuth/models/Login.js');
+//const controller = require("../controllers/LoginController");
 
-const controller = require("../controllers/LoginController");
-
-//router.route("/api/register").get(controller.Login);
+//router.route("/api/register").get(controller.);
 
 //router.route("/").get(controller.Get).post(controller.Insert);
-// POST route to register a user
-router.post('/', function (req, res) {
+//POST route to register a user
+router.post('/api/register', function (req, res) {
     const {
         email,
         password
     } = req.body;
-    const user = new User({
+    const login = new Login({
         email,
         password
     });
-    user.save(function (err) {
+    console.log(login);
+    login.save(function (err) {
+        console.log(err);
         if (err) {
             res.status(500)
                 .send("Error registering new user please try again.");
@@ -25,5 +27,8 @@ router.post('/', function (req, res) {
         }
     });
 });
+
+
+
 
 module.exports = router;
