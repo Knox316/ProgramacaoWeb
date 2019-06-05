@@ -110,11 +110,12 @@ app.use(function (err, req, res, next) {
 
 
 //jwt
-app.get('/api/secret', withAuth, function (req, res) {
+app.get('http://localhost:3000/api/secret', withAuth, function (req, res) {
   res.send('The password is ');
 });
 
-app.get('/checkToken', withAuth, function (req, res) {
+app.get('http://localhost:3000/checkToken', withAuth, function (req, res) {
+  console.log(withAuth);
   res.sendStatus(200);
 });
 

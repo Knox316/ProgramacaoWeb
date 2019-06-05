@@ -22,7 +22,7 @@ export default class Login extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    fetch('/api/authenticate', {
+    fetch('/login/api/register', {
       method: 'POST',
       body: JSON.stringify(this.state),
       headers: {
@@ -52,26 +52,26 @@ export default class Login extends Component {
           <form onSubmit={this.onSubmit}>
             <div className="form-group">
               <input type="email"
-                class="form-control"
+                className="form-control"
                 id="exampleInputEmail1"
                 aria-describedby="emailHelp"
                 placeholder="Enter email"
-                value={this.state.email}
+                //value={this.state.email}
                 onChange={this.handleInputChange}
                 required />
             </div>
             <div className="form-group">
               <input type="password"
-                class="form-control"
+                className="form-control"
                 id="examplePassword11"
                 aria-describedby="passwordHelp"
                 placeholder="Enter password"
-                value={this.state.password}
+                //value={this.state.password}
                 onChange={this.handleInputChange}
                 required />
             </div>
-            <div class="text-center">
-              <button type="submit" class="btn btn-primary">Submit</button>
+            <div className="text-center">
+              <button type="submit" className="btn btn-primary">Submit</button>
             </div>
           </form>
         </div>
