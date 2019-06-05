@@ -7,6 +7,8 @@ var express = require('express');
 var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var cron = require('node-cron');
+
 
 var withAuth = require('./src/api/jwtAuth/middleware/middleware');
 var indexRouter = require('./src/api/routes/index');
@@ -55,6 +57,11 @@ mongoose.connect(mongo_uri, function (err) {
   } else {
     console.log(`Successfully connected to ${mongo_uri}`);
   }
+});
+
+cron.schedule('* * * * *', () => {
+  console.log("---------------------");
+  console.log("Running Cron Job");
 });
 
 // catch 404 and forward to error handler
