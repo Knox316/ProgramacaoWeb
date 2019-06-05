@@ -10,7 +10,17 @@ function getIssuesPromisse(dtmIssuesAfter) {
 
 function GetAllIssues(req, res) {
   getIssuesPromisse(req.params.dtmIssuesAfter).then(data => {
-    generic.SendResponse(req, res, data);
+    generic.SendResponse(req, res, data.data.issues);
+  }).catch((err) => {
+
+  });
+}
+
+function SendEmailIssues() {
+  getIssuesPromisse('2019-04-12T00:43Z').then(data => {
+    data.data.issues.forEach(function (issue) {
+      console.log(issue.assigned_to);
+    });
   }).catch((err) => {
 
   });
@@ -69,4 +79,7 @@ exports.Update = Update;
 exports.Delete = Delete;
 exports.InsertAllIssues = InsertAllIssues;
 exports.DropCollection = DropCollection;
+exports.GetAllIssues = GetAllIssues;
+exports.SendEmailIssues = SendEmailIssues;
+exports.getIssuesPromisse = getIssuesPromisse;
 

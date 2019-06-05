@@ -65,3 +65,4 @@ exports.Insert = Insert;
 exports.InsertMany = InsertMany;
 exports.Update = Update;
 exports.Delete = Delete;
+exports.getUsersPromisse = getUsersPromisse;

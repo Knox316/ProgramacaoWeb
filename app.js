@@ -13,6 +13,7 @@ var usersRouter = require('./src/api/routes/users');
 var issuesRouter = require('./src/api/routes/issues');
 var emailRouter = require('./src/api/routes/email');
 var loginRouter = require('./src/api/routes/login');
+var issuesUser = require('./src/api/routes/issuesUser');
 
 require('dotenv').config();
 
@@ -49,6 +50,7 @@ app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
 app.use('/login', loginRouter);
+app.use('/issuesUser', issuesUser);
 
 
 // catch 404 and forward to error handler

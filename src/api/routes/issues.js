@@ -12,6 +12,10 @@ router.route("/InsertMany").post(controller.InsertMany);
 
 router.route("/CreateCollection").post(controller.CreateCollection);
 
+router.route("/GetAllIssues/:dtmIssuesAfter").get(controller.GetAllIssues);
+
+router.route("/SendEmailIssues").get(controller.SendEmailIssues);
+
 router.route("/:idToFind").get(controller.Get).delete(controller.Delete);
 
 router.route("/").get(controller.GetAll).post(controller.Insert);
