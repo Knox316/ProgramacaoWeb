@@ -1,42 +1,40 @@
-var cors = require('cors');
-var mongoose = require('mongoose');
-var expressGraphQL = require('express-graphql');
-var bodyParser = require('body-parser');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var cron = require('node-cron');
-var request = require('request');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const errorHandler = require('errorhandler');
+const cron = require('node-cron');
+const logger = require('morgan');
 
 
+//Configure mongoose's promise to global promise
+mongoose.promise = global.Promise;
 
-var withAuth = require('./src/api/jwtAuth/middleware/middleware');
-var indexRouter = require('./src/api/routes/index');
-var usersRouter = require('./src/api/routes/users');
-var issuesRouter = require('./src/api/routes/issues');
-var emailRouter = require('./src/api/routes/email');
-var loginRouter = require('./src/api/jwtAuth/routes/login');
-var authRouter = require('./src/api/jwtAuth/routes/auth');
+//Configure isProduction variable
+const isProduction = process.env.NODE_ENV === 'production';
 
+//Initiate our app
+const app = express();
 
-var app = express();
-app.use(cookieParser());
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
-  next();
-});
-
+//Configure our app
 require('dotenv').config();
-console.log(process.env.SECRET);
-
-app.use(
-  cors(),
-  bodyParser.json()
-)
-
+app.use(cors());
+app.use(require('morgan')('dev'));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: process.env.SECRET,
+  cookie: {
+    maxAge: 60000
+  },
+  resave: false,
+  saveUninitialized: false
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -48,51 +46,75 @@ app.use(express.urlencoded({
   extended: false
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
+if (!isProduction) {
+  app.use(errorHandler());
+}
 
+//Configure Mongoose
+mongoose.connect('mongodb://localhost/mydb');
+mongoose.set('debug', true);
+
+var indexRouter = require('./src/api/routes/index');
+var usersRouter = require('./src/api/routes/users');
+var issuesRouter = require('./src/api/routes/issues');
+var emailRouter = require('./src/api/routes/email');
+
+//models and routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-app.use('/login', loginRouter);
-app.use('/auth', authRouter);
+//app.use('/jwt', jwtIndexRouter);
 
-const mongo_uri = 'mongodb://localhost/mydb';
-mongoose.connect(mongo_uri, function (err) {
-  if (err) {
-    throw err;
-  } else {
-    console.log(`Successfully connected to ${mongo_uri}`);
-  }
-});
+
+//var jwtIndexRouter = require('./src/api/jwtAuth/routes/index');
+/*JWT*/
+require('./src/api/jwtAuth/models/Users');
+require('./src/api/jwtAuth/config/passport');
+app.use(require('./src/api/jwtAuth/routes'));
+
+
+
+
+//Error handlers & middlewares
+if (!isProduction) {
+  app.use((err, req, res) => {
+    res.status(err.status || 500);
+
+    res.json({
+      errors: {
+        message: err.message,
+        error: err,
+      },
+    });
+  });
+}
 
 cron.schedule('* * * * *', () => {
   console.log("---------------------");
   console.log("Running Cron Job");
   console.log("running a task every minute");
-  const users = request('https://redmine-mock-api.herokuapp.com/api/v1/users', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      //  console.log(users.data);
-      console.log('oi');
-      //https://www.npmjs.com/package/cron
-      //https://www.npmjs.com/search?q=node-cron
-      //https://www.npmjs.com/package/mongoose-cron
-      //https://stackoverflow.com/questions/44917031/update-multiple-documents-with-mongoose-using-node-cron
+  console.log(process.env.SECRET);
+  console.log(process.env.NODE_ENV);
+  // const users = request('https://redmine-mock-api.herokuapp.com/api/v1/users', function (error, response, body) {
+  //   if (!error && response.statusCode == 200) {
+  //     //  console.log(users.data);
+  //     console.log('oi');
+  //     //https://www.npmjs.com/package/cron
+  //     //https://www.npmjs.com/search?q=node-cron
+  //     //https://www.npmjs.com/package/mongoose-cron
+  //     //https://stackoverflow.com/questions/44917031/update-multiple-documents-with-mongoose-using-node-cron
 
-      //Objetivo backend
-      //Como diz no enunciado do trabalho, de 5 em 5min
-      //Fazer uma chamada a issues e users
-      //e guardar a informação em base de dados sem ser necessário chamar nenhum endpoint
-      //verificar se há alguma data já existente
-      //se existe, então atualiza tudo
-      //se não existe, então insere
-    }
-  })
-
-
-
-
-});
+  //     //Objetivo backend
+  //     //Como diz no enunciado do trabalho, de 5 em 5min
+  //     //Fazer uma chamada a issues e users
+  //     //e guardar a informação em base de dados sem ser necessário chamar nenhum endpoint
+  //     //verificar se há alguma data já existente
+  //     //se existe, então atualiza tudo
+  //     //se não existe, então insere
+})
+// })
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -108,20 +130,6 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-
-
-});
-
-
-
-//jwt
-app.get('http://localhost:3000/api/secret', withAuth, function (req, res) {
-  res.send('The password is ');
-});
-
-app.get('http://localhost:3000/checkToken', withAuth, function (req, res) {
-  console.log(withAuth);
-  res.sendStatus(200);
 });
 
 module.exports = app;
