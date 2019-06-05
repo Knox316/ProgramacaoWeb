@@ -64,14 +64,20 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-//app.use('/jwt', jwtIndexRouter);
 
-
-//var jwtIndexRouter = require('./src/api/jwtAuth/routes/index');
 /*JWT*/
 require('./src/api/jwtAuth/models/Users');
 require('./src/api/jwtAuth/config/passport');
 app.use(require('./src/api/jwtAuth/routes'));
+//http://localhost:3000/api/users
+/**
+ * {
+  "user": {
+    "email": "test@test",
+    "password": "test"
+  }
+}
+ */
 
 
 
