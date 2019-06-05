@@ -24,6 +24,11 @@ var authRouter = require('./src/api/jwtAuth/routes/auth');
 var app = express();
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Headers', 'Content-type,Authorization');
+  next();
+});
+
 require('dotenv').config();
 console.log(process.env.SECRET);
 
