@@ -8,7 +8,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 
-var withAuthRouter = require('./src/api/jwtAuth/middleware/middleware');
+var withAuth = require('./src/api/jwtAuth/middleware/middleware');
 var indexRouter = require('./src/api/routes/index');
 var usersRouter = require('./src/api/routes/users');
 var issuesRouter = require('./src/api/routes/issues');
@@ -48,6 +48,14 @@ app.use('/email', emailRouter);
 app.use('/login', loginRouter);
 app.use('/auth', authRouter);
 
+const mongo_uri = 'mongodb://localhost/mydb';
+mongoose.connect(mongo_uri, function (err) {
+  if (err) {
+    throw err;
+  } else {
+    console.log(`Successfully connected to ${mongo_uri}`);
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -70,11 +78,11 @@ app.use(function (err, req, res, next) {
 
 
 //jwt
-app.get('/api/secret', withAuthRouter, function (req, res) {
+app.get('/api/secret', withAuth, function (req, res) {
   res.send('The password is ');
 });
 
-app.get('/checkToken', withAuthRouter, function (req, res) {
+app.get('/checkToken', withAuth, function (req, res) {
   res.sendStatus(200);
 });
 
