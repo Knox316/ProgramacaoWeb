@@ -8,6 +8,8 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var cron = require('node-cron');
+var request = require('request');
+
 
 
 var withAuth = require('./src/api/jwtAuth/middleware/middleware');
@@ -62,6 +64,29 @@ mongoose.connect(mongo_uri, function (err) {
 cron.schedule('* * * * *', () => {
   console.log("---------------------");
   console.log("Running Cron Job");
+  console.log("running a task every minute");
+  const users = request('https://redmine-mock-api.herokuapp.com/api/v1/users', function (error, response, body) {
+    if (!error && response.statusCode == 200) {
+      //  console.log(users.data);
+      console.log('oi');
+      //https://www.npmjs.com/package/cron
+      //https://www.npmjs.com/search?q=node-cron
+      //https://www.npmjs.com/package/mongoose-cron
+      //https://stackoverflow.com/questions/44917031/update-multiple-documents-with-mongoose-using-node-cron
+
+      //Objetivo backend
+      //Como diz no enunciado do trabalho, de 5 em 5min
+      //Fazer uma chamada a issues e users
+      //e guardar a informação em base de dados sem ser necessário chamar nenhum endpoint
+      //verificar se há alguma data já existente
+      //se existe, então atualiza tudo
+      //se não existe, então insere
+    }
+  })
+
+
+
+
 });
 
 // catch 404 and forward to error handler
