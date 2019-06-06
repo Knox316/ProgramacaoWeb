@@ -104,3 +104,7 @@ typings/
 
 .vscode
 
+<<<<<<< HEAD
+=======
+.env
+>>>>>>> 6a4e020d55629d46f80b66fd2b80059c259cd97e
