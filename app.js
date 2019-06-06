@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 const errorHandler = require('errorhandler');
 const cron = require('node-cron');
 const logger = require('morgan');
+const swaggerJSDoc = require('swagger-jsdoc');
+
+
 
 var indexRouter = require('./src/api/routes/index');
 var usersRouter = require('./src/api/routes/users');
@@ -23,6 +26,33 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 //Initiate our app
 const app = express();
+
+//SWAGGER
+// swagger definition
+var swaggerDefinition = {
+  info: {
+    title: 'Node Swagger API',
+    version: '1.0.0',
+    description: 'Demonstrating how to describe a RESTful API with Swagger',
+  },
+  host: 'localhost:3000',
+  basePath: '/',
+};
+// options for the swagger docs
+var options = {
+  // import swaggerDefinitions
+  swaggerDefinition: swaggerDefinition,
+  // path to the API docs
+  apis: ['./**/routes/*.js', 'routes.js'], // pass all in array 
+};
+// initialize swagger-jsdoc
+var swaggerSpec = swaggerJSDoc(options);
+
+// serve swagger 
+app.get('/swagger.json', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 
 //Configure our app
 require('dotenv').config();
@@ -66,6 +96,21 @@ var issuesRouter = require('./src/api/routes/issues');
 var emailRouter = require('./src/api/routes/email');
 
 //models and routes
+/**
+ * @swagger
+ * /:
+ *   get:
+ *     tags:
+ *       - index
+ *     description: goes to index
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: index of the server
+ *         schema:
+ *           $ref: '#/definitions/users'
+ */
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
