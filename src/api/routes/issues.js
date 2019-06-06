@@ -4,12 +4,57 @@ const app = express()
 var timeout = require('connect-timeout');
 const controller = require("../controllers/issuesController");
 
+
+/**
+    issues = [
+        id = Number,
+        project = {
+            id = Number,
+            name: String
+        },
+        tracker = {
+            id: Number,
+            name: String
+        },
+        status = {
+            id = Number,
+            name = String
+        },
+        priority = {
+            id = Number,
+            name = String
+        },
+        author = {
+            id = Number,
+            name = String
+        },
+        assigned_to = {
+            id = Number,
+            name = String
+        },
+        subject = String,
+        description = String,
+        start_date = String,
+        done_ratio = Number,
+        closed_on = String,
+        created_on = String,
+        updated_on = String
+ */
 /**
  * @swagger
  * definition:
  *   issues:
  *     properties:
- *       after:
+ *       total_count:
+ *         type: number
+ *       offset:
+ *         type: number
+ *       limit:
+ *         type: number
+ *       issues:
+ *         type: array
+ *         items:
+ *          type:
  */
 
 /**
