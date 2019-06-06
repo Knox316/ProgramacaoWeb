@@ -16,8 +16,8 @@ function GetUsers(req, res) {
 async function GetUsersById(req, res) {
     try {
         var user = await axios.get(baseURL + "/" + req.params.id)
-        console.log(user.data);
-        res.json(user.data);
+
+        generic.SendResponse(req, res, user.data);
 
     } catch (err) {
         console.error('Axios Error:', err)

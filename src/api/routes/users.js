@@ -13,9 +13,15 @@ router.route("/CreateCollection")
 router.route("/:idToFind")
     .get(controller.Get)
     .delete(controller.Delete);
+    
+router.get("/FromAPI", controller.GetUsers);
+router.get("/FromAPI/:idToFind", controller.GetUsersById);
 
 router.route("/")
     .get(controller.GetAll)
     .post(controller.Insert);
 
+
+// exports.GetUsers = GetUsers;
+// exports.GetUsersById = GetUsersById;
 module.exports = router;
