@@ -9,6 +9,21 @@ app.use(express.json());
 
 /**
  * @swagger
+ * definition:
+ *   email:
+ *     properties:
+ *       from:
+ *         type: string
+ *       to:
+ *         type: string
+ *       subject:
+ *         type: string
+ *       html:
+ *         type: string
+ */
+
+/**
+ * @swagger
  * /email:
  *   post:
  *     tags:
@@ -17,12 +32,12 @@ app.use(express.json());
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: tarun
+ *       - name: email
  *         description: user object
  *         in: body
- *         required: true
+ *         required: true 
  *         schema:
- *           $ref: '#/definitions/user'
+ *           $ref: '#/definition/email'
  *     responses:
  *       200:
  *         description: Successfully send
