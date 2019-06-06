@@ -19,7 +19,7 @@ class IssuesUser {
             var users = values[1].data;
 
             issues.forEach(function (issue) {
-                self user = users.filter((user) => { return user.id == issue.assigned_to.id; });
+                self.user = users.filter((user) => { return user.id == issue.assigned_to.id; });
 
                 self.email.Email.SendEmail(user.mail);
             });

@@ -15,7 +15,6 @@ var indexRouter = require('./src/api/routes/index');
 var usersRouter = require('./src/api/routes/users');
 var issuesRouter = require('./src/api/routes/issues');
 var emailRouter = require('./src/api/routes/email');
-var loginRouter = require('./src/api/routes/login');
 var issuesUser = require('./src/api/routes/issuesUser');
 
 //Configure mongoose's promise to global promise
@@ -115,7 +114,6 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-app.use('/login', loginRouter);
 app.use('/issuesUser', issuesUser);
 
 /*JWT*/
