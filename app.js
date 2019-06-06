@@ -1,12 +1,12 @@
-var cors = require('cors');
-var mongoose = require('mongoose');
-var expressGraphQL = require('express-graphql');
-var bodyParser = require('body-parser');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const errorHandler = require('errorhandler');
+const cron = require('node-cron');
+const logger = require('morgan');
 
 var indexRouter = require('./src/api/routes/index');
 var usersRouter = require('./src/api/routes/users');
@@ -15,22 +15,32 @@ var emailRouter = require('./src/api/routes/email');
 var loginRouter = require('./src/api/routes/login');
 var issuesUser = require('./src/api/routes/issuesUser');
 
+//Configure mongoose's promise to global promise
+mongoose.promise = global.Promise;
+
+//Configure isProduction variable
+const isProduction = process.env.NODE_ENV === 'production';
+
+//Initiate our app
+const app = express();
+
+//Configure our app
 require('dotenv').config();
-
-var app = express();
-
-app.use(
-  cors(),
-  bodyParser.json()
-)
-app.use(
-  "/graphql",
-  expressGraphQL({
-    schema: {},
-    rootValue: {},
-    graphiql: true
-  })
-);
+app.use(cors());
+app.use(require('morgan')('dev'));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: process.env.SECRET,
+  cookie: {
+    maxAge: 60000
+  },
+  resave: false,
+  saveUninitialized: false
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -42,9 +52,20 @@ app.use(express.urlencoded({
   extended: false
 }));
 
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+if (!isProduction) {
+  app.use(errorHandler());
+}
 
+//Configure Mongoose
+mongoose.connect('mongodb://localhost/mydb');
+mongoose.set('debug', true);
+
+var indexRouter = require('./src/api/routes/index');
+var usersRouter = require('./src/api/routes/users');
+var issuesRouter = require('./src/api/routes/issues');
+var emailRouter = require('./src/api/routes/email');
+
+//models and routes
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
@@ -52,6 +73,62 @@ app.use('/email', emailRouter);
 app.use('/login', loginRouter);
 app.use('/issuesUser', issuesUser);
 
+/*JWT*/
+require('./src/api/jwtAuth/models/Users');
+require('./src/api/jwtAuth/config/passport');
+app.use(require('./src/api/jwtAuth/routes'));
+//http://localhost:3000/api/users
+/**
+ * {
+  "user": {
+    "email": "test@test",
+    "password": "test"
+  }
+}
+ */
+
+
+
+
+//Error handlers & middlewares
+if (!isProduction) {
+  app.use((err, req, res) => {
+    res.status(err.status || 500);
+
+    res.json({
+      errors: {
+        message: err.message,
+        error: err,
+      },
+    });
+  });
+}
+
+cron.schedule('* * * * *', () => {
+  console.log("---------------------");
+  console.log("Running Cron Job");
+  console.log("running a task every minute");
+  console.log(process.env.SECRET);
+  console.log(process.env.NODE_ENV);
+  // const users = request('https://redmine-mock-api.herokuapp.com/api/v1/users', function (error, response, body) {
+  //   if (!error && response.statusCode == 200) {
+  //     //  console.log(users.data);
+  //     console.log('oi');
+  //     //https://www.npmjs.com/package/cron
+  //     //https://www.npmjs.com/search?q=node-cron
+  //     //https://www.npmjs.com/package/mongoose-cron
+  //     //https://stackoverflow.com/questions/44917031/update-multiple-documents-with-mongoose-using-node-cron
+
+  //     //Objetivo backend
+  //     //Como diz no enunciado do trabalho, de 5 em 5min
+  //     //Fazer uma chamada a issues e users
+  //     //e guardar a informação em base de dados sem ser necessário chamar nenhum endpoint
+  //     //verificar se há alguma data já existente
+  //     //se existe, então atualiza tudo
+  //     //se não existe, então insere
+})
+// })
+// });
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -63,20 +140,6 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  //mongo connection
-  const port = process.env.PORT || 5000;
-  const uri = `mongodb+srv://${process.env.DB_USER}:<${process.env.DB_PASS}>@cluster0-q0j88.mongodb.net/test?retryWrites=true&w=majority`
-  //const uri = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@ds135852.mlab.com:35852/mern-graphql-jwt`;
-  mongoose.connect(uri, {
-    useNewUrlParser: true
-  })
-    .then(() => {
-      app.listen(port, () => console.log(`Server is listening on port: ${port}`));
-    })
-    .catch(err => {
-      console.log(err);
-    })
 
   // render the error page
   res.status(err.status || 500);

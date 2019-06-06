@@ -101,3 +101,7 @@ typings/
 /.vs/ProjectSettings.json
 /.vs/ProgramacaoWeb/config/applicationhost.config
 .vscode/
+
+.vscode
+
+.env

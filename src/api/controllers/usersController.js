@@ -26,7 +26,7 @@ async function GetUsersById(req, res) {
 
 function InsertAllUsers(req, res) {
     getUsersPromisse.then(data => {
-        await (usersModel.InsertMany(data)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+        await(usersModel.InsertMany(data)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
     });
 }
 
@@ -66,3 +66,5 @@ exports.InsertMany = InsertMany;
 exports.Update = Update;
 exports.Delete = Delete;
 exports.getUsersPromisse = getUsersPromisse;
+exports.GetUsers = GetUsers;
+exports.GetUsersById = GetUsersById;
