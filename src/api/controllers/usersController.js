@@ -1,67 +1,65 @@
-var axios = require("axios");
-var generic = require('./genericController');
-var usersModel = require("../models/usersModel")
-const baseURL = "https://redmine-mock-api.herokuapp.com/api/v1/users";
+// @ts-check
 
-var getUsersPromisse = axios.get(baseURL + "?forceMail=email@address.domain");
+'use strict';
+var svc = require('../services/users');
 
-function GetUsers(req, res) {
-    getUsersPromisse.then(data => {
-        generic.SendResponse(req, res, data);
-    }).catch((err) => {
+exports.getAllUsers = async (req, res) => {
+    res.json(await svc.getUsers());
+};
 
+
+exports.createUser = async (req, res) => {
+
+    let issue = await svc.createUser(req.body)
+        .catch(err => {
+            res.status(404).send(JSON.stringify(err.message));
+        });
+
+    if (issue) res.json({
+        message: "Issue criada.",
+        Issue: issue
     });
-}
+};
 
-async function GetUsersById(req, res) {
-    try {
-        var user = await axios.get(baseURL + "/" + req.params.id)
-        console.log(user.data);
-        res.json(user.data);
 
-    } catch (err) {
-        console.error('Axios Error:', err)
-    }
-}
 
-function InsertAllUsers(req, res) {
-    getUsersPromisse.then(data => {
-        await (usersModel.InsertMany(data)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
+exports.getUserById = async (req, res) => {
+
+    var enc = await svc.getUserById(req.params.id)
+        .catch(err => {
+            res.status(404).send(JSON.stringify(err.message));
+        });
+    if (enc) res.json(enc);
+};
+
+
+exports.updateUser = async (req, res) => {
+
+    var enc = await svc.updateUser(req.params.id, req.body)
+        .catch(err => {
+            res.status(404).send(JSON.stringify(err.message));
+        });
+
+    if (enc) res.json({
+        message: "Issue atualizada!",
+        Atualizada: enc
     });
-}
+};
 
-async function CreateCollection(req, res) {
-    await (usersModel.CreateCollection()).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
 
-async function GetAll(req, res) {
-    await (usersModel.GetAll()).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
+exports.deleteUser = async (req, res) => {
 
-async function Get(req, res) {
-    await (usersModel.Get(req.params.idToFind)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
+    var enc = await svc.deleteUser(req.params.id)
+        .catch(err => {
+            res.status(404).send(JSON.stringify(err.message));
+        });
 
-async function Delete(req, res) {
-    await (usersModel.Delete(req.params.idToFind)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
+    if (enc) res.json({
+        message: 'Issue apagada!',
+        Apagada: enc
+    });
+};
 
-async function Insert(req, res) {
-    await (usersModel.Insert(req.body)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
-
-async function InsertMany(req, res) {
-    await (usersModel.InsertMany(req.body)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
-
-async function Update(req, res) {
-    await (usersModel.Update(req.body)).then(data => generic.SendResponse(req, res, data)).catch(err => generic.SendResponse(req, res, err));
-}
-
-exports.CreateCollection = CreateCollection;
-exports.GetAll = GetAll;
-exports.Get = Get;
-exports.Insert = Insert;
-exports.InsertMany = InsertMany;
-exports.Update = Update;
-exports.Delete = Delete;
+exports.getForce = async (req, res) => {
+    res.json(await svc.getForce());
+};

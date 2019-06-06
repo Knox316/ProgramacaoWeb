@@ -24,6 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.7",
     "mongoose": "^5.5.13",
+    "mongoose-id-validator": "^0.5.3",
     "morgan": "^1.9.1",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.2.1",

@@ -9,15 +9,41 @@ const cron = require('node-cron');
 const logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
 
-
-
-
-//Configure mongoose's promise to global promise
-mongoose.promise = global.Promise;
-
 //Configure isProduction variable
 const isProduction = process.env.NODE_ENV === 'production';
 
+
+/**
+ * MONGOOSE
+ */
+//Configure mongoose's promise to global promise
+mongoose.promise = global.Promise;
+//Configure Mongoose
+mongoose.connect('mongodb://localhost/mydb', {
+  useNewUrlParser: true
+}).then(
+  (res) => {
+    console.log("Successfully connected to the database.")
+  }
+).catch(() => {
+  console.log("Connection to database failed.");
+});
+
+mongoose.set('debug', true);
+
+require('./src/api/models/Email');
+require('./src/api/models/Issues');
+require('./src/api/models/Users');
+
+
+//ROUTE
+const indexRouter = require('./src/api/routes/index');
+const usersRouter = require('./src/api/routes/users');
+const issuesRouter = require('./src/api/routes/issues');
+const emailRouter = require('./src/api/routes/email');
+/*JWT*/
+require('./src/api/jwtAuth/models/Users');
+require('./src/api/jwtAuth/config/passport');
 //Initiate our app
 const app = express();
 
@@ -80,15 +106,6 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 
-//Configure Mongoose
-mongoose.connect('mongodb://localhost/mydb');
-mongoose.set('debug', true);
-
-var indexRouter = require('./src/api/routes/index');
-var usersRouter = require('./src/api/routes/users');
-var issuesRouter = require('./src/api/routes/issues');
-var emailRouter = require('./src/api/routes/email');
-
 //models and routes
 /**
  * @swagger
@@ -105,14 +122,14 @@ var emailRouter = require('./src/api/routes/email');
  *         schema:
  *           $ref: '#/definitions/users'
  */
+
+//ROUTE
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
 
-/*JWT*/
-require('./src/api/jwtAuth/models/Users');
-require('./src/api/jwtAuth/config/passport');
+//JWT
 app.use(require('./src/api/jwtAuth/routes'));
 //http://localhost:3000/api/users
 /**
