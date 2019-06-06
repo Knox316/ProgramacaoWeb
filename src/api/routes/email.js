@@ -2,11 +2,6 @@ var express = require("express");
 var router = express.Router();
 const controller = require("../controllers/emailController");
 
-
-
-var app = express();
-app.use(express.json());
-
 /**
  * @swagger
  * definition:
@@ -42,6 +37,7 @@ app.use(express.json());
  *       200:
  *         description: Successfully send
  */
-router.route("/").post(controller.SendEmail);
+router.route("/")
+    .post(controller.SendEmail);
 
 module.exports = router;
