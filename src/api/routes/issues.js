@@ -40,43 +40,7 @@ const controller = require("../controllers/issuesController");
         created_on = String,
         updated_on = String
  */
-/**
- * @swagger
- * definition:
- *   issues:
- *     properties:
- *       total_count:
- *         type: number
- *       offset:
- *         type: number
- *       limit:
- *         type: number
- *       issues:
- *         type: array
- *         items:
- *          type:
- */
 
-/**
- * @swagger
- * /issues/InsertAllIssues/:dtmIssuesAfter:
- *   post:
- *     tags:
- *       - issues
- *     description: sends gets issues after date
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: dtmIssuesAfter
- *         description: user object
- *         in: body
- *         required: true 
- *         schema:
- *           $ref: '#/definition/email'
- *     responses:
- *       200:
- *         description: Successfully send
- */
 router.post("/InsertAllIssues/:dtmIssuesAfter", (req, res) => {
     SetTimeout(req, res, controller.InsertAllIssues)
 });
