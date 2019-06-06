@@ -77,10 +77,18 @@ var issuesController = require('../controllers/issuesController');
 router.get('/', issuesController.getAllIssues);
 router.post('/', issuesController.createIssue);
 
+<<<<<<< HEAD
 // "/issues/id"
 router.get('/:id', issuesController.getAllIssues);
 router.put('/:id', issuesController.updateIssue);
 router.delete('/:id', issuesController.deleteIssue);
+=======
+router.route("/GetAllIssues/:dtmIssuesAfter").get(controller.GetAllIssues);
+
+router.route("/SendEmailIssues").get(controller.SendEmailIssues);
+
+router.route("/:idToFind").get(controller.Get).delete(controller.Delete);
+>>>>>>> 09b771f5bed4a573514e6f7d1061601692a8f1a9
 
 router.get('/:date', issuesController.getIssueByDate);
 

@@ -13,9 +13,18 @@ const swaggerJSDoc = require('swagger-jsdoc');
 const isProduction = process.env.NODE_ENV === 'production';
 
 
+<<<<<<< HEAD
 /**
  * MONGOOSE
  */
+=======
+var indexRouter = require('./src/api/routes/index');
+var usersRouter = require('./src/api/routes/users');
+var issuesRouter = require('./src/api/routes/issues');
+var emailRouter = require('./src/api/routes/email');
+var issuesUser = require('./src/api/routes/issuesUser');
+
+>>>>>>> 09b771f5bed4a573514e6f7d1061601692a8f1a9
 //Configure mongoose's promise to global promise
 mongoose.promise = global.Promise;
 //Configure Mongoose
@@ -128,6 +137,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
+app.use('/issuesUser', issuesUser);
 
 //JWT
 app.use(require('./src/api/jwtAuth/routes'));
