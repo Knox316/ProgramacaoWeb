@@ -4,11 +4,13 @@
 var mongoose = require('mongoose');
 let request = require('request');
 
-var Issue = mongoose.model('Issue');
+var Issue = require('../models/Issue');
 var repo = require('../persistance/issues');
 var ObjectId = require('mongoose').Types.ObjectId;
 const baseURL = "https://redmine-mock-api.herokuapp.com/api/v1/";
 
+
+// const baseUrl = "https://redmine-mock-api.herokuapp.com/api/v1/issues?after=2019-04-13T12:00"
 function getFromIssue(uri) {
 
     return new Promise((resolve, reject) => {
@@ -17,8 +19,8 @@ function getFromIssue(uri) {
             json: true
         }, (err, res, body) => {
             if (err) return reject(err);
-
             try {
+                console.log(body);
                 resolve(body);
             } catch (e) {
                 reject(e);

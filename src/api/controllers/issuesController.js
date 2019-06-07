@@ -10,15 +10,10 @@ exports.getAllIssues = async (req, res) => {
 
 exports.createIssue = async (req, res) => {
 
-  let issue = await svc.createIssue(req.body)
+  let issue = await svc.createIssue(req)
     .catch(err => {
       res.status(404).send(JSON.stringify(err.message));
     });
-
-  if (issue) res.json({
-    message: "Issue criada.",
-    Issue: issue
-  });
 };
 
 

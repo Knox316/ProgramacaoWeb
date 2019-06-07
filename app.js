@@ -8,10 +8,11 @@ const errorHandler = require('errorhandler');
 const cron = require('node-cron');
 const logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
-
+const issueService = require('./src/api/services/issues');
+const issueCreate = require('./src/api/controllers/issuesController');
 //Configure isProduction variable
 const isProduction = process.env.NODE_ENV === 'production';
-
+const moment = require('moment');
 
 /**
  * MONGOOSE
@@ -32,7 +33,6 @@ mongoose.connect('mongodb://localhost/mydb', {
 mongoose.set('debug', true);
 
 require('./src/api/models/Email');
-require('./src/api/models/Issues');
 require('./src/api/models/Users');
 
 
@@ -41,6 +41,7 @@ const indexRouter = require('./src/api/routes/index');
 const usersRouter = require('./src/api/routes/users');
 const issuesRouter = require('./src/api/routes/issues');
 const emailRouter = require('./src/api/routes/email');
+//const issuesUserRouter = require('./src/api/routes/issuesUser');
 /*JWT*/
 require('./src/api/jwtAuth/models/Users');
 require('./src/api/jwtAuth/config/passport');
@@ -128,7 +129,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-app.use('/issuesUser', issuesUser);
+//app.use('/issuesUser', issuesUserRouter);
 
 //JWT
 app.use(require('./src/api/jwtAuth/routes'));
@@ -159,12 +160,21 @@ if (!isProduction) {
   });
 }
 
-cron.schedule('* * * * *', () => {
+cron.schedule('* * * * *', async () => {
   console.log("---------------------");
   console.log("Running Cron Job");
   console.log("running a task every minute");
   console.log(process.env.SECRET);
   console.log(process.env.NODE_ENV);
+
+  var date = moment().subtract(1, 'days').toISOString(); // or format() - see below
+  console.log(date);
+
+  const res = await issueService.getIssueByDate(date);
+  console.log(res);
+
+
+  issueCreate.createIssue(res)
   // const users = request('https://redmine-mock-api.herokuapp.com/api/v1/users', function (error, response, body) {
   //   if (!error && response.statusCode == 200) {
   //     //  console.log(users.data);

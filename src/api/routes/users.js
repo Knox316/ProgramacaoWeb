@@ -25,13 +25,13 @@ var router = express.Router();
 var usersController = require('../controllers/usersController');
 
 // "/issues"
-router.get('/', usersController.getAllIssues);
-router.post('/', usersController.createIssue);
+router.get('/', usersController.getAllUsers);
+router.post('/', usersController.createUser);
 
 // "/issues/id"
-router.get('/:id', usersController.getAllIssues);
-router.put('/:id', usersController.updateIssue);
-router.delete('/:id', usersController.deleteIssue);
+router.get('/:id', usersController.getAllUsers);
+router.put('/:id', usersController.updateUser);
+router.delete('/:id', usersController.deleteUser);
 
 router.get('/force', usersController.getForce);
 
