@@ -9,7 +9,7 @@ exports.fetchAllUsers = async (req, res) => {
 };
 
 exports.getUsers = async (req, res) => {
-  res.json(await svc.getUsers());
+  await res.json(svc.getUsers());
 };
 
 
@@ -66,5 +66,5 @@ exports.deleteUser = async (req, res) => {
 };
 
 exports.getForce = async (req, res) => {
-  res.json(await svc.getForce());
+  // res.json(await svc.getForce());
 };

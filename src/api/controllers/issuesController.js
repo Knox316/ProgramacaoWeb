@@ -51,8 +51,8 @@ exports.deleteIssue = async (req, res) => {
 };
 
 exports.getIssueByDate = async (req, res) => {
-  const enc = await svc.getIssueByDate(req.params.date).catch((err) => {
-    res.status(404).send(JSON.stringify(err.message));
-  });
-  if (enc) res.json(enc);
+  // const enc = await svc.getIssueByDate(req.params.date).catch((err) => {
+  //   res.status(404).send(JSON.stringify(err.message));
+  // });
+  // if (enc) res.json(enc);
 };
