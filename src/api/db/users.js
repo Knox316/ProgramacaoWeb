@@ -2,11 +2,11 @@
 
 'use strict';
 var mongoose = require('mongoose');
-var Issue = mongoose.model('Issue');
+var FetchUsers = mongoose.model('FetchUsers');
 
-exports.getIssues = async () => {
+exports.getUsers = async () => {
 
-    return await Issue.find({})
+    return await FetchUsers.find({})
         .then(result => {
             return result;
         }).catch(err => {
@@ -15,9 +15,9 @@ exports.getIssues = async () => {
 };
 
 
-exports.createIssue = async (newIssue) => {
+exports.createUser = async (newUser) => {
 
-    return await newIssue.save()
+    return await newUser.save()
         .then(result => {
             return result;
         }).catch(err => {
@@ -26,9 +26,9 @@ exports.createIssue = async (newIssue) => {
 
 };
 
-exports.getIssueById = async (id) => {
+exports.getUserById = async (id) => {
 
-    return await Issue.findById(id)
+    return await FetchUsers.findById(id)
         .then(result => {
             return result;
         }).catch(err => {
@@ -36,10 +36,10 @@ exports.getIssueById = async (id) => {
         })
 };
 
-exports.getIssueByDate = async (date) => {
+exports.getUserByName = async (name) => {
 
-    return await Issue.find({
-            date: date
+    return await FetchUsers.find({
+            username: name
         })
         .then(result => {
             return result;
@@ -48,9 +48,9 @@ exports.getIssueByDate = async (date) => {
         })
 };
 
-exports.updateIssue = async (id, updated) => {
+exports.updateUser = async (id, updated) => {
 
-    return await Issue.findOneAndUpdate({
+    return await FetchUsers.findOneAndUpdate({
             _id: id
         }, updated, {
             new: true
@@ -63,9 +63,9 @@ exports.updateIssue = async (id, updated) => {
 };
 
 
-exports.deleteIssue = async (id) => {
+exports.deleteUser = async (id) => {
 
-    return await Issue.findOneAndRemove({
+    return await FetchUsers.findOneAndRemove({
             _id: id
         })
         .then(result => {

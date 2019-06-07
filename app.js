@@ -8,49 +8,51 @@ const errorHandler = require('errorhandler');
 const cron = require('node-cron');
 const logger = require('morgan');
 const swaggerJSDoc = require('swagger-jsdoc');
-const issueService = require('./src/api/services/issues');
+const issueService = require('./src/api/fetchServicesBD/issues');
 const issueCreate = require('./src/api/controllers/issuesController');
-//Configure isProduction variable
+const usersService = require('./src/api/fetchServicesBD/users');
+const usersCreate = require('./src/api/controllers/usersController');
+const db = require('./src/api/shared/db');
+// Configure isProduction variable
 const isProduction = process.env.NODE_ENV === 'production';
 const moment = require('moment');
 
 /**
  * MONGOOSE
  */
-//Configure mongoose's promise to global promise
+// Configure mongoose's promise to global promise
 mongoose.promise = global.Promise;
-//Configure Mongoose
+// Configure Mongoose
 mongoose.connect('mongodb://localhost/mydb', {
-  useNewUrlParser: true
+  useNewUrlParser: true,
 }).then(
   (res) => {
-    console.log("Successfully connected to the database.")
-  }
+    console.log('Successfully connected to the database.');
+  },
 ).catch(() => {
-  console.log("Connection to database failed.");
+  console.log('Connection to database failed.');
 });
 
 mongoose.set('debug', true);
 
 require('./src/api/models/Email');
-require('./src/api/models/Users');
 
 
-//ROUTE
+// ROUTE
 const indexRouter = require('./src/api/routes/index');
 const usersRouter = require('./src/api/routes/users');
 const issuesRouter = require('./src/api/routes/issues');
 const emailRouter = require('./src/api/routes/email');
-//const issuesUserRouter = require('./src/api/routes/issuesUser');
-/*JWT*/
+// const issuesUserRouter = require('./src/api/routes/issuesUser');
+/* JWT */
 require('./src/api/jwtAuth/models/Users');
 require('./src/api/jwtAuth/config/passport');
-//Initiate our app
+// Initiate our app
 const app = express();
 
-//SWAGGER
+// SWAGGER
 // swagger definition
-var swaggerDefinition = {
+const swaggerDefinition = {
   info: {
     title: 'Node Swagger API',
     version: '1.0.0',
@@ -60,37 +62,39 @@ var swaggerDefinition = {
   basePath: '/',
 };
 // options for the swagger docs
-var options = {
+const options = {
   // import swaggerDefinitions
-  swaggerDefinition: swaggerDefinition,
+  swaggerDefinition,
   // path to the API docs
-  apis: ['./**/routes/*.js', 'routes.js'], // pass all in array 
+  apis: ['./**/routes/*.js', 'routes.js'], // pass all in array
 };
 // initialize swagger-jsdoc
-var swaggerSpec = swaggerJSDoc(options);
+const swaggerSpec = swaggerJSDoc(options);
 
-// serve swagger 
-app.get('/swagger.json', function (req, res) {
+// serve swagger
+app.get('/swagger.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   res.send(swaggerSpec);
 });
 
-//Configure our app
+// Configure our app
 require('dotenv').config();
+
 app.use(cors());
 app.use(require('morgan')('dev'));
+
 app.use(bodyParser.urlencoded({
-  extended: false
+  extended: false,
 }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: process.env.SECRET,
   cookie: {
-    maxAge: 60000
+    maxAge: 60000,
   },
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
 }));
 
 // view engine setup
@@ -100,14 +104,14 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({
-  extended: false
+  extended: false,
 }));
 
 if (!isProduction) {
   app.use(errorHandler());
 }
 
-//models and routes
+// models and routes
 /**
  * @swagger
  * /:
@@ -124,16 +128,16 @@ if (!isProduction) {
  *           $ref: '#/definitions/users'
  */
 
-//ROUTE
+// ROUTE
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-//app.use('/issuesUser', issuesUserRouter);
+// app.use('/issuesUser', issuesUserRouter);
 
-//JWT
+// JWT
 app.use(require('./src/api/jwtAuth/routes'));
-//http://localhost:3000/api/users
+// http://localhost:3000/api/users
 /**
  * {
   "user": {
@@ -146,7 +150,7 @@ app.use(require('./src/api/jwtAuth/routes'));
 
 
 
-//Error handlers & middlewares
+// Error handlers & middlewares
 if (!isProduction) {
   app.use((err, req, res) => {
     res.status(err.status || 500);
@@ -161,47 +165,28 @@ if (!isProduction) {
 }
 
 cron.schedule('* * * * *', async () => {
-  console.log("---------------------");
-  console.log("Running Cron Job");
-  console.log("running a task every minute");
+  console.log('---------------------');
+  console.log('Running Cron Job');
+  console.log('running a task every minute');
   console.log(process.env.SECRET);
   console.log(process.env.NODE_ENV);
 
-  var date = moment().subtract(1, 'days').toISOString(); // or format() - see below
-  console.log(date);
+  const date = moment().subtract(1, 'days').toISOString(); // or format() - see below
 
-  const res = await issueService.getIssueByDate(date);
-  console.log(res);
-
-
-  issueCreate.createIssue(res)
-  // const users = request('https://redmine-mock-api.herokuapp.com/api/v1/users', function (error, response, body) {
-  //   if (!error && response.statusCode == 200) {
-  //     //  console.log(users.data);
-  //     console.log('oi');
-  //     //https://www.npmjs.com/package/cron
-  //     //https://www.npmjs.com/search?q=node-cron
-  //     //https://www.npmjs.com/package/mongoose-cron
-  //     //https://stackoverflow.com/questions/44917031/update-multiple-documents-with-mongoose-using-node-cron
-
-  //     //Objetivo backend
-  //     //Como diz no enunciado do trabalho, de 5 em 5min
-  //     //Fazer uma chamada a issues e users
-  //     //e guardar a informação em base de dados sem ser necessário chamar nenhum endpoint
-  //     //verificar se há alguma data já existente
-  //     //se existe, então atualiza tudo
-  //     //se não existe, então insere
-})
-// })
-// });
+  const resIssue = await issueService.getIssueByDate(date);
+  issueCreate.createIssue(resIssue);
+  const resUser = await usersService.getForce();
+  // console.log(resUser);
+  usersCreate.createUser(resUser);
+});
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

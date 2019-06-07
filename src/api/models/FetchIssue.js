@@ -43,4 +43,4 @@ var IssueSchema = new Schema({
 });
 
 IssueSchema.plugin(idvalidator);
-module.exports = mongoose.model('Issue', IssueSchema);
+module.exports = mongoose.model('FetchIssue', IssueSchema);

@@ -1,85 +1,15 @@
-// @ts-check
-
 'use strict';
 var mongoose = require('mongoose');
-var User = mongoose.model('User');
-var repo = require('../persistance/users');
+var FetchUsers = require('../models/FetchUsers');
+var repo = require('../db/users');
 let request = require('request');
 var ObjectId = require('mongoose').Types.ObjectId;
-const baseUrl = "https://redmine-mock-api.herokuapp.com/api/v1/users/"
-//var mapperEnc = require('../dtos/fabricaDTO');
-
-
-function getFromUser(uri) {
-
-    return new Promise((resolve, reject) => {
-        request.get(uri, {
-            rejectUnauthorized: false,
-            json: true
-        }, (err, res, body) => {
-            if (err) return reject(err);
-
-            try {
-                resolve(body);
-            } catch (e) {
-                reject(e);
-            }
-        });
-    });
-}
-/**
- * /api/v1/users/{id}?forceMail=email@address
- * ?forceMail=email@address.domain
- */
-exports.getForceById = async (id) => {
-    var uri = baseUrl.concat(id).concat('forceMail=email@address');
-    console.log(uri);
-    return await getFromUser(uri);
-};
-
-exports.getForce = async () => {
-    var uri = baseUrl.concat('?forceMail=email@address.domain');
-    console.log(uri);
-    return await getFromUser(uri);
-};
 
 exports.getUsers = async () => {
     var all = await repo.getUsers();
 
     //return mapperEnc.fabricaDTO(all);
     return all;
-};
-
-function getFromCatalogo(uri) {
-
-    return new Promise((resolve, reject) => {
-        request.get(uri, {
-            rejectUnauthorized: false,
-            json: true
-        }, (err, res, body) => {
-            if (err) return reject(err);
-
-            try {
-                resolve(body);
-            } catch (e) {
-                reject(e);
-            }
-        });
-    });
-}
-
-
-exports.createUser = async (data) => {
-
-    var enc;
-    try {
-        enc = new User(data); //can throw
-        var ret = await repo.createUser(enc);
-
-        return ret;
-    } catch (e) {
-        throw new Error("User invalida: " + e.message);
-    }
 };
 
 exports.getUserById = async (id) => {
