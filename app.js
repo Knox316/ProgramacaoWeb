@@ -43,7 +43,7 @@ const indexRouter = require('./src/api/routes/index');
 const usersRouter = require('./src/api/routes/users');
 const issuesRouter = require('./src/api/routes/issues');
 const emailRouter = require('./src/api/routes/email');
-// const issuesUserRouter = require('./src/api/routes/issuesUser');
+const issuesUserRouter = require('./src/api/routes/issuesUser');
 /* JWT */
 require('./src/api/jwtAuth/models/Users');
 require('./src/api/jwtAuth/config/passport');
@@ -133,7 +133,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/issues', issuesRouter);
 app.use('/email', emailRouter);
-// app.use('/issuesUser', issuesUserRouter);
+app.use('/issuesUser', issuesUserRouter);
 
 // JWT
 app.use(require('./src/api/jwtAuth/routes'));
