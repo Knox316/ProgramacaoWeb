@@ -57,9 +57,9 @@ exports.updateUser = async (id, data) => {
 
 exports.deleteUser = async (id) => {
 
-    if (!ObjectId.isValid(id)) {
-        throw new Error("Invalid ID: " + id);
-    }
+    // if (!ObjectId.isValid(id)) {
+    //     throw new Error("Invalid ID: " + id);
+    // }
 
     var deleted = await repo.deleteUser(id);
 

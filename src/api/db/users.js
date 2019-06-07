@@ -66,7 +66,7 @@ exports.updateUser = async (id, updated) => {
 exports.deleteUser = async (id) => {
 
     return await FetchUsers.findOneAndRemove({
-            _id: id
+            id: id
         })
         .then(result => {
             return result;
